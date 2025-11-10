@@ -3,7 +3,7 @@ include("../models/Car.php");
 include("../connection/connection.php");
 include("../services/ResponseService.php");
 
-function getCarByID(){
+/*function getCarByID(){
     global $connection;
 
     if(isset($_GET["id"])){
@@ -17,9 +17,29 @@ function getCarByID(){
     echo ResponseService::response(200, $car->toArray());
     return;
 }
-
+**/
 //getCarById();
-getCars();
+function getCars(){
+    global $connection;
+    if(isset($_GET["id"])){
+        $id=$_GET["id"];
+        $car= Car::find($connection,$id);
+        if ($car){
+            echo ResponseService::response(200, $car->toArray());
+        }
+        else{
+            echo ResponseService::response(404, "No such id");
+        }
+    } else{
+        $cars= Car::all($connection);
+        $carsArr=[];
+        foreach ($cars as car){
+            $carsArr=$car->toArray();
+        }
+        echo ResponseService::response(200,$carsArr);
+        return;
+    }
+}
 
 //ToDO: 
 //transform getCarByID to getCars()
